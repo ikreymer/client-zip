@@ -3,6 +3,7 @@ import { BufferLike, StreamLike, normalizeInput, ReadableFromIter } from "./inpu
 import { normalizeMetadata } from "./metadata.ts"
 import { loadFiles, contentLength, ForAwaitable } from "./zip.ts"
 
+
 /** The file name, modification date and size will be read from the input;
  * extra arguments can be given to override the input’s metadata. */
 type InputWithMeta = File | Response | { input: File | Response, name?: any, lastModified?: any, size?: number | bigint }
@@ -56,3 +57,6 @@ export function downloadZip(files: ForAwaitable<InputWithMeta | InputWithSizeMet
   if (options.metadata) headers["Content-Length"] = String(predictLength(options.metadata))
   return new Response(ReadableFromIter(loadFiles(mapFiles(files))), { headers })
 }
+
+export { loadFiles };
+

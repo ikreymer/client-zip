@@ -122,14 +122,18 @@ export async function* fileData(file: ZipFileDescription & Metadata) {
     file.uncompressedSize = BigInt(bytes.length)
   } else {
     file.uncompressedSize = 0n
-    const reader = bytes.getReader()
-    while (true) {
-      const { value, done } = await reader.read()
-      if (done) break
-      file.crc = crc32(value!, file.crc)
+    for await (const value of bytes.iter) {
+      file.crc = crc32(value, file.crc);
       file.uncompressedSize += BigInt(value!.length)
-      yield value!
     }
+    //const reader = bytes.stream.getReader()
+    //while (true) {
+    //  const { value, done } = await reader.read()
+    //  if (done) break
+    //  file.crc = crc32(value!.bytes, file.crc)
+    //  file.uncompressedSize += BigInt(value!.bytes.length)
+    //}
+    yield {id: bytes.id, size: file.uncompressedSize};
   }
 }
 
