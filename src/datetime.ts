@@ -3,7 +3,7 @@ export function formatDOSDateTime(date: Date, into: DataView, offset = 0) {
   | date.getUTCMinutes() << 5
   | date.getUTCHours() << 11
 
-  const dosDate = date.getDate()
+  const dosDate = date.getUTCDate()
   | (date.getUTCMonth() + 1) << 5
   | (date.getUTCFullYear() - 1980) << 9
 
